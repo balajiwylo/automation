@@ -46,8 +46,4 @@ public class CourseEnrollUserAccountPage {
 		makeAsCompleteButton.click();
 		backButton.click();
 	}
-
-
-
-
 }
