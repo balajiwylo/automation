@@ -54,6 +54,7 @@ public class SignInPage {
         continueEmailText.sendKeys(emailID);
         Reporter.log(emailID, true);
         continueButton.click();
+        wUtils.waitUntilEleToBeVisible(10,verifyButton);
         Assert.assertEquals(verifyButton.getText(),VisibleText.OtpPage.OTP_VERIFY_BUTTON, "Verify Button is not displayed");
         verifyBtn.click();
         Assert.assertEquals(errorOtpMessage.getText(),VisibleText.OtpPage.OTP_ERROR_MESSAGE,"Error Message is Not Displayed");

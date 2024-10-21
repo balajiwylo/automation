@@ -53,7 +53,7 @@ public class BaseClass {
 		wUtils.waitForEleImplicitly(10);
 		driver.get(Url);
 	}
-	@AfterClass
+	//@AfterClass
 	public void closeBrowser() {
 		driver.quit();
 	}

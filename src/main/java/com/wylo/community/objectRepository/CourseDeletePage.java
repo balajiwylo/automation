@@ -26,15 +26,15 @@ public class CourseDeletePage {
 	private WebElement editOption;
 
 	
-	public void deleteCourse(WebDriverUtility wUtils) throws InterruptedException
-	{
-		Thread.sleep(2000);
-		onBoardTourModalCloseButton.click();
-		Thread.sleep(2000);
-		cookiesBanner.click();
-		//wUtils.waitUntilEleToBeVisible(10, viewDetailsOption);
-		viewDetailsOption.click();
-		//Thread.sleep(2000);
+//	public void deleteCourse(WebDriverUtility wUtils) throws InterruptedException
+//	{
+//		Thread.sleep(2000);
+//		onBoardTourModalCloseButton.click();
+//		Thread.sleep(2000);
+//		cookiesBanner.click();
+//		//wUtils.waitUntilEleToBeVisible(10, viewDetailsOption);
+//		viewDetailsOption.click();
+//		//Thread.sleep(2000);
 		//wUtils.scrollTillElementToBeVisible(threeDotOption);
 //		wUtils.directScroll(threeDotOption);
 		//Thread.sleep(5000);
@@ -45,4 +45,4 @@ public class CourseDeletePage {
 //		//deleteButton.click();
 	}
 
-}
+//}
