@@ -53,7 +53,7 @@ public class BaseClass {
 		wUtils.waitForEleImplicitly(10);
 		driver.get(Url);
 	}
-	//@AfterClass
+	@AfterClass
 	public void closeBrowser() {
 		driver.quit();
 	}
@@ -65,11 +65,11 @@ public class BaseClass {
 		String otp = eUtils.readDataFromExcel("Admin", 1, 0);
 		signinPage.signInWeb(emailId, otp, wUtils);
 	}
-	//@AfterMethod
+	@AfterMethod
 	public void signOut()
 	{
-		SignoutPage signout = new	SignoutPage(driver);
-		signout.signoutAccount(wUtils);
+		SignoutPage signOut = new	SignoutPage(driver);
+		signOut.signoutAccount(wUtils);
 	}
 
 }

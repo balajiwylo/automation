@@ -110,7 +110,7 @@ public class CoursePage {
     private WebElement threeDotIcon;
 
     @FindBy(xpath = "//li[normalize-space()='Edit']")
-    private WebElement editChpaterOption;
+    private WebElement editChapterOption;
 
     @FindBy(xpath = "//button[text()='Create']")
     private WebElement createButton;
@@ -211,36 +211,51 @@ public class CoursePage {
     @FindBy(xpath = "//P[contains(@class,'CourseDetails__Title')]")
     private WebElement courseTitle;
 
+    @FindBy(id = "yoopta-editor")
+    private WebElement editedAboutCourse;
 
     public void createCourse(WebDriverUtility wUtils, String cName, String sDescription, String FAQ_Question, String FAQ_Answer, String aboutSection, String chapterName, String lessonName, String filePath) throws InterruptedException, AWTException {
-        navigateToCourseSection(wUtils);
+        //  navigateToCourseSection(wUtils);
         openCourseCreation();
         uploadCoverImage(wUtils, filePath);
         fillCourseDetails(cName, sDescription);
         addFaq(wUtils, FAQ_Question, FAQ_Answer);
         aboutTextField.sendKeys(aboutSection);
         continueBtn.click();
-        wUtils.waitUntilEleToBeVisible(20,chapterNameTextField);
+        wUtils.waitUntilEleToBeVisible(30, chapterNameTextField);
         addChapter(chapterName);
         addLesson(wUtils, lessonName);
+        // wUtils.waitUntilEleToBeClickable(10,publishButton);
         publishCourse(wUtils);
         afterCourseCreationCloseButton.click();
     }
 
 
-    public void editCourse(WebDriverUtility wUtils, String filePath, String ecourse, String eDescription, String eFaqQuestion, String eFaqAnswer, String eAboutTheCourse, String editChapterName, String lessonFilePath, String lessonName, String lessonCommand, String command) throws AWTException, InterruptedException {
-        // navigateToCourseSection(wUtils);
+    public void editCourse(WebDriverUtility wUtils, WebDriver driver,String filePath1, String ecourse, String eDescription, String eFaqQuestion, String eFaqAnswer, String eAboutTheCourse, String editChapterName, String lessonFilePath, String lessonName, String lessonCommand) throws AWTException, InterruptedException {
+        navigateToCourseSection(wUtils);
         wUtils.waitUntilEleToBeClickable(20, viewDetailsOption);
         viewCourseDetails();
         wUtils.directScroll(editOption);
         editOption.click();
-        uploadCoverImage(wUtils, filePath);
+        changeCoverImage(wUtils, filePath1);
         updateCourseDetails(ecourse, eDescription);
         updateFaq(wUtils, eFaqQuestion, eFaqAnswer);
-        updateAboutSection(eAboutTheCourse);
+        updateAboutSection(wUtils,eAboutTheCourse);
         editChapter(wUtils, editChapterName);
         updateLesson(wUtils, lessonFilePath, lessonName, lessonCommand);
+        wUtils.waitUntilEleToBeClickable(20, updateButton);
         updateButton.click();
+        //Assert.assertEquals(courseTitle.getText(), VisibleText.CreateCoursePage.COURSE_TITLE_NAME, "Course title not Edited");
+        wUtils.waitUntilEleToBeClickable(20,viewDetailsOption);
+        viewCourseDetails();
+        wUtils.directScroll(editedAboutCourse);
+        try {
+            Assert.assertEquals(editedAboutCourse.getText(), VisibleText.CreateCoursePage.EDITED_ABOUT_COURSE, "About course not edited");
+        } catch (AssertionError e) {
+            WebDriverUtility.captureScreenshot(driver, "EditCourse_AssertionFailed");
+            throw e;
+        }
+        Assert.assertEquals(editedAboutCourse.getText(), VisibleText.CreateCoursePage.EDITED_ABOUT_COURSE, "About course not edited");
     }
 
     public void deleteCourse(WebDriverUtility wUtils) throws InterruptedException {
@@ -275,6 +290,11 @@ public class CoursePage {
         wUtils.uploadFile(filePath);
     }
 
+    private void changeCoverImage(WebDriverUtility wUtils, String editChangeCoverImage) throws InterruptedException, AWTException {
+        changeCoverImageBtn.click();
+        wUtils.uploadFile(editChangeCoverImage);
+    }
+
     private void fillCourseDetails(String cName, String sDescription) {
         courseName.sendKeys(cName);
         shortDescription.sendKeys(sDescription);
@@ -297,21 +317,39 @@ public class CoursePage {
         backButton.click();
     }
 
-    private void addChapter(String chapterName) {
+    private void updateFaq(WebDriverUtility wUtils, String question, String answer) {
+        wUtils.waitUntilEleToBeVisible(10, addFaqOption1);
+        wUtils.scrollTillElementToBeVisible(addFaqOption1);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        wUtils.waitUntilEleToBeVisible(10, addFaqOption1);
+        addFaqOption1.click();
+        editIcon.click();
+        questionTestField.clear();
+        questionTestField.sendKeys(question);
+        answerTextField.clear();
+        answerTextField.sendKeys(answer);
+        addButton.click();
+        backButton.click();
+    }
 
+    private void addChapter(String chapterName) {
         chapterNameTextField.sendKeys(chapterName);
         chapterCreateButton.click();
     }
 
     private void addLesson(WebDriverUtility wUtils, String lessonName) throws InterruptedException {
-       // wUtils.waitUntilEleToBeClickable(10, newLessonOption);
+        // wUtils.waitUntilEleToBeClickable(10, newLessonOption);
         newLessonOption.click();
         lessonTitleTextField.sendKeys(lessonName);
         lessonCreateButton.click();
     }
 
-    private void publishCourse(WebDriverUtility wUtils) {
-        wUtils.waitUntilEleToBeClickable(20, publishButton);
+    private void publishCourse(WebDriverUtility wUtils) throws InterruptedException {
+        Thread.sleep(3000);
         publishButton.click();
         wUtils.waitUntilEleToBeVisible(20, courseTitle);
         Assert.assertEquals(courseTitle.getText(), VisibleText.CreateCoursePage.COURSE_TITLE_NAME, "Course Title Name Is Wrong");
@@ -328,52 +366,50 @@ public class CoursePage {
         shortDescription.sendKeys(eDescription);
     }
 
-    private void updateFaq(WebDriverUtility wUtils, String question, String answer) {
-        wUtils.scrollTillElementToBeVisible(addFaqOption1);
-        addFaqOption1.click();
-        editIcon.click();
-        questionTestField.clear();
-        questionTestField.sendKeys(question);
-        answerTextField.clear();
-        answerTextField.sendKeys(answer);
-        addButton.click();
-        backButton.click();
-    }
-
-    private void updateAboutSection(String aboutText) {
+    private void updateAboutSection(WebDriverUtility wUtils,String aboutText) throws InterruptedException {
         aboutTextField.clear();
         aboutTextField.sendKeys(aboutText);
+        wUtils.waitUntilEleToBeVisible(10,updateAndContinueBtn);
+        wUtils.scrollTillElementToBeVisible(updateAndContinueBtn);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         updateAndContinueBtn.click();
     }
 
-    private void editChapter(WebDriverUtility wUtils, String chapterName) {
+    private void editChapter(WebDriverUtility wUtils, String chapterName) throws InterruptedException {
         threeDotIcon.click();
-        editChpaterOption.click();
+        editChapterOption.click();
+        Thread.sleep(2000);
         chapterNameTextField.clear();
+        wUtils.waitUntilEleToBeVisible(30, chapterNameTextField);
         chapterNameTextField.sendKeys(chapterName);
         createButton.click();
     }
 
     /**
-     * @param wUtils         updated
-     * @param lessonFilePath
+     * @param wUtils     updated
+     * @param lessonPath
      * @param lessonName
      * @param commands
      * @throws AWTException
      * @throws InterruptedException
      * @author Balaji
      */
-    private void updateLesson(WebDriverUtility wUtils, String lessonFilePath, String lessonName, String commands) throws AWTException, InterruptedException {
+    private void updateLesson(WebDriverUtility wUtils, String lessonPath, String lessonName, String commands) throws AWTException, InterruptedException {
         sectionContainer.click();
         editLessonOption.click();
         addLessonVideo.click();
         lessonUploadButton.click();
-        wUtils.uploadFile(lessonFilePath);
+        wUtils.uploadFile(lessonPath);
+        wUtils.waitUntilEleToBeVisible(10, courseNameTextField);
         courseNameTextField.clear();
         courseNameTextField.sendKeys(lessonName);
+        lessonCommandsTextField.clear();
         lessonCommandsTextField.sendKeys(commands);
         saveButton.click();
     }
-
 
 }

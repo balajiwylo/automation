@@ -1,12 +1,11 @@
-//package com.wylo.community.objectRepository;
-//
+package com.wylo.community.objectRepository;
+
 //import org.openqa.selenium.WebDriver;
 //import org.openqa.selenium.WebElement;
 //import org.openqa.selenium.support.FindBy;
 //import org.openqa.selenium.support.PageFactory;
-//
 //import com.wylo.community.genricUtility.WebDriverUtility;
-//
+
 //public class DeleteAndCreateTheNewFAQAndChapterAndLessonPage {
 //	public DeleteAndCreateTheNewFAQAndChapterAndLessonPage(WebDriver driver)
 //	{

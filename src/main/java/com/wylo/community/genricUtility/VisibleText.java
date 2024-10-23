@@ -25,6 +25,7 @@ public interface VisibleText {
     interface CreateCoursePage {
         String COURSE_TITLE_NAME = "New Course created";
         String EDIT_COURSE_NAME= "New edit course and free";
+        String EDITED_ABOUT_COURSE= "Edit course and free";
         String DELETED_COURSE = "New edit course and free";
     }
 }
