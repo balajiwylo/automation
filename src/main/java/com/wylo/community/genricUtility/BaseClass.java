@@ -22,54 +22,58 @@ import com.wylo.community.objectRepository.CompleteProfilePopupPage;
 import com.wylo.community.objectRepository.SignoutPage;
 
 public class BaseClass {
-	public WebDriver driver;
-	public static WebDriver sdriver;
-	public WebDriverUtility wUtils;
-	public FileUtility fUtils=new FileUtility();
-	public ExcelUtility eUtils=new ExcelUtility();
+    public WebDriver driver;
+    public static WebDriver sdriver;
+    public WebDriverUtility wUtils;
+    public FileUtility fUtils = new FileUtility();
+    public ExcelUtility eUtils = new ExcelUtility();
+    protected String currentRole;
 
-	@BeforeClass()
-	public void launchBrowser() throws IOException {
-		ChromeOptions options = new ChromeOptions();
-		Map<String,Object> prefs = new HashedMap<>();
-		prefs.put("profile.default_content_setting_values.notifications", 1);
-		options.setExperimentalOption("prefs", prefs);
-		options.addArguments("--incognito");
-		String Browser = fUtils.readDataFromPropertyFile("browser");
-		String Url = fUtils.readDataFromPropertyFile("urlUser");
-		if(Browser.equalsIgnoreCase("chrome")) {
-			driver=new ChromeDriver(options);
-		}
-		else if(Browser.equalsIgnoreCase("firefox")) {
-			driver=new FirefoxDriver();
-		}
-		else if(Browser.equalsIgnoreCase("edge"))
-		{
-			driver=new EdgeDriver();
-		}
-		sdriver=driver;
-		wUtils=new WebDriverUtility(driver);
-		wUtils.maximizeWindow();
-		wUtils.waitForEleImplicitly(10);
-		driver.get(Url);
-	}
-	@AfterClass
-	public void closeBrowser() {
-		driver.quit();
-	}
-	@BeforeMethod
-	public void signIn() throws EncryptedDocumentException, IOException, InterruptedException
-	{
-		SignInPage signinPage = new SignInPage(driver);
-		String emailId = eUtils.readDataFromExcel("Admin", 0, 0);
-		String otp = eUtils.readDataFromExcel("Admin", 1, 0);
-		signinPage.signInWeb(emailId, otp, wUtils);
-	}
-	@AfterMethod
-	public void signOut()
-	{
-		SignoutPage signOut = new	SignoutPage(driver);
-		signOut.signoutAccount(wUtils);
-	}
+    @BeforeClass()
+    public void launchBrowser() throws IOException {
+        ChromeOptions options = new ChromeOptions();
+        Map<String, Object> prefs = new HashedMap<>();
+        prefs.put("profile.default_content_setting_values.notifications", 1);
+        options.setExperimentalOption("prefs", prefs);
+        options.addArguments("--incognito");
+        String Browser = fUtils.readDataFromPropertyFile("browser");
+        String Url = fUtils.readDataFromPropertyFile("urlUser");
+        if (Browser.equalsIgnoreCase("chrome")) {
+            driver = new ChromeDriver(options);
+        } else if (Browser.equalsIgnoreCase("firefox")) {
+            driver = new FirefoxDriver();
+        } else if (Browser.equalsIgnoreCase("edge")) {
+            driver = new EdgeDriver();
+        }
+        sdriver = driver;
+        wUtils = new WebDriverUtility(driver);
+        wUtils.maximizeWindow();
+        wUtils.waitForEleImplicitly(10);
+        driver.get(Url);
+    }
 
+    @AfterClass
+    public void closeBrowser() {
+        driver.quit();
+    }
+
+    @BeforeMethod
+    public void signIn() throws EncryptedDocumentException, IOException, InterruptedException {
+        SignInPage signinPage = new SignInPage(driver);
+        String emailId = eUtils.readDataFromExcel("Admin", 0, 0);
+        String otp = eUtils.readDataFromExcel("Admin", 1, 0);
+        signinPage.signInWeb(emailId, otp, wUtils);
+    }
+    public void userSignIn() throws IOException, InterruptedException {
+        SignInPage signinPage = new SignInPage(driver);
+        String userMailID=eUtils.readDataFromExcel("User",0,0);
+        String userOtp=eUtils.readDataFromExcel("User",1,0);
+        signinPage.signInWeb(userMailID,userOtp,wUtils);
+    }
+
+    @AfterMethod
+    public void signOut() {
+        SignoutPage signOut = new SignoutPage(driver);
+        signOut.signoutAccount(wUtils);
+    }
 }

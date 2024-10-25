@@ -23,7 +23,7 @@ public class SignInPage {
     }
 
     @FindBy(xpath = "//button[text()='Sign in']")
-    private WebElement signinButton;
+    private WebElement signInButton;
 
     @FindBy(xpath = "//div[text()='Continue with email']")
     private WebElement continueWithEmail;
@@ -48,25 +48,24 @@ public class SignInPage {
 
     public void signInWeb(String emailID, String otpValue, WebDriverUtility wUtils) throws InterruptedException {
 
-        signinButton.click();
+        signInButton.click();
         Assert.assertEquals(txtWylo.getText(), VisibleText.SignInPage.WYLO, "Wylo Text Is Not Available ");
         continueWithEmail.click();
         continueEmailText.sendKeys(emailID);
         Reporter.log(emailID, true);
         continueButton.click();
-        wUtils.waitUntilEleToBeVisible(10,verifyButton);
-        Assert.assertEquals(verifyButton.getText(),VisibleText.OtpPage.OTP_VERIFY_BUTTON, "Verify Button is not displayed");
+        wUtils.waitUntilEleToBeVisible(10, verifyButton);
+        Assert.assertEquals(verifyButton.getText(), VisibleText.OtpPage.OTP_VERIFY_BUTTON, "Verify Button is not displayed");
         verifyBtn.click();
-        Assert.assertEquals(errorOtpMessage.getText(),VisibleText.OtpPage.OTP_ERROR_MESSAGE,"Error Message is Not Displayed");
+        Assert.assertEquals(errorOtpMessage.getText(), VisibleText.OtpPage.OTP_ERROR_MESSAGE, "Error Message is Not Displayed");
         fillingOtp(otpValue);
         Thread.sleep(2000);
         verifyBtn.click();
     }
 
-
     /**
      * @param otp String Value
-     * @author Mugilan
+     * @author Balaji
      */
     public void fillingOtp(String otp) {
         for (int i = 0; i < otp.length() - 1; i++) {

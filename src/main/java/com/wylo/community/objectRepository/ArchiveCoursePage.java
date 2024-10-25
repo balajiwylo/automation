@@ -25,7 +25,6 @@ public class ArchiveCoursePage {
 	@FindBy(xpath = "//button[@class='KebabBTN__GroupOptionsBTN-sc-e95cf605-0 hmVKJv']")
 	private WebElement threeDotOption;
 
-	
 
 	public void archiveCourse(WebDriverUtility wUtils) throws InterruptedException
 	{

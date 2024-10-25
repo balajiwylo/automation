@@ -58,6 +58,9 @@ public class WebDriverUtility {
     public void mouseHover(WebElement element) {
         act.click(element).perform();
     }
+    public void pauseElement(WebElement element){
+        act.pause(3000);
+    }
 
     public void dragAndDrop(WebElement src, WebElement dsr) {
         act.dragAndDrop(src, dsr).perform();
@@ -174,7 +177,7 @@ public class WebDriverUtility {
     }
 
     /**
-     * @param list List<WebELement>
+     * @param list List<WebElement>
      * @return Array
      */
     public String[] getTextFromList(List<WebElement> list) {
