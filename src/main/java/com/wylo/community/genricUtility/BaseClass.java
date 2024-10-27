@@ -52,7 +52,7 @@ public class BaseClass {
         driver.get(Url);
     }
 
-    @AfterClass
+  //  @AfterClass
     public void closeBrowser() {
         driver.quit();
     }
@@ -71,7 +71,7 @@ public class BaseClass {
         signinPage.signInWeb(userMailID,userOtp,wUtils);
     }
 
-    @AfterMethod
+  //  @AfterMethod
     public void signOut() {
         SignoutPage signOut = new SignoutPage(driver);
         signOut.signoutAccount(wUtils);

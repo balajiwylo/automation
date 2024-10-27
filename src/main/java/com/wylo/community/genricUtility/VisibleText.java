@@ -28,4 +28,8 @@ public interface VisibleText {
         String EDITED_ABOUT_COURSE= "Edit course and free";
         String DELETED_COURSE = "New edit course and free";
     }
+    interface ChoosePays{
+        String EXCLUSIVE_OF_TAXES="Exclusive of taxes : Community members will cover the charges.";
+        String INCLUSIVE_OFpTAXES="Inclusive of taxes I will cover the charges.";
+    }
 }

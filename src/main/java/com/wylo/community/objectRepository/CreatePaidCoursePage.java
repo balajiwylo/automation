@@ -29,17 +29,9 @@
 //
 //	@FindBy(id = "yoopta-contenteditable")
 //	private WebElement aboutTextField;
-//
-//
-//
-//
-//
-//
-//
+
 //	//@FindBy(xpath = "//div[6]//div[1]//div[1]")
-//
-//
-//
+
 //	@FindBy(xpath = "//button[text()='Continue']")
 //	private WebElement continueBtn;
 //

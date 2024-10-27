@@ -49,7 +49,6 @@ public class WebDriverUtility {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(sec));
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
-
     public void waitUntilToGetTitle(int sec, String title) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(sec));
         wait.until(ExpectedConditions.titleContains(title));

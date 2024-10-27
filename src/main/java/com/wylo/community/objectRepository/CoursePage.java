@@ -1,7 +1,7 @@
 package com.wylo.community.objectRepository;
 
 
-import java.awt.AWTException;
+import java.awt.*;
 import java.util.List;
 
 import com.wylo.community.genricUtility.VisibleText;
@@ -166,7 +166,7 @@ public class CoursePage {
     @FindBy(xpath = "//div[@class='CreateCoursePricing__CourseTypePill-sc-638915af-3 ecNqXr']")
     private WebElement paidOption;
 
-    @FindBy(xpath = "//input[@placeholder='0.00']")
+    @FindBy(xpath = "//input[@aria-label='Price Input']")
     private WebElement coursePriceTextField;
 
     @FindBy(xpath = "//div[contains(text(),'Add taxes')]")
@@ -214,7 +214,8 @@ public class CoursePage {
     @FindBy(id = "yoopta-editor")
     private WebElement editedAboutCourse;
 
-
+    @FindBy(xpath = "//p[text()='Test tax']/..//div[contains(@class,'CustomCheckbox')]")
+    private WebElement testTaxCheckBox;
 
     public void createCourse(WebDriverUtility wUtils, String cName, String sDescription, String FAQ_Question, String FAQ_Answer, String aboutSection, String chapterName, String lessonName, String filePath) throws InterruptedException, AWTException {
         navigateToCourseSection(wUtils);
@@ -227,7 +228,7 @@ public class CoursePage {
         wUtils.waitUntilEleToBeVisible(30, chapterNameTextField);
         addChapter(chapterName);
         addLesson(wUtils, lessonName);
-        // wUtils.waitUntilEleToBeClickable(10,publishButton);
+        wUtils.waitUntilEleToBeClickable(10, publishButton);
         publishCourse(wUtils);
         afterCourseCreationCloseButton.click();
     }
@@ -253,16 +254,42 @@ public class CoursePage {
         viewCourseDetails();
         wUtils.directScroll(editedAboutCourse);
         wUtils.pauseElement(editedAboutCourse);
-//        try {
-//            Assert.assertEquals(editedAboutCourse.getText(), VisibleText.CreateCoursePage.EDITED_ABOUT_COURSE, "About course not edited");
-//        } catch (AssertionError e) {
-//            WebDriverUtility.captureScreenshot(driver, "EditCourse_AssertionFailed");
-//            throw e;
-//        }
+        try {
+            Assert.assertEquals(editedAboutCourse.getText(), VisibleText.CreateCoursePage.EDITED_ABOUT_COURSE, "About course not edited");
+        } catch (AssertionError e) {
+            WebDriverUtility.captureScreenshot(driver, "EditCourse_AssertionFailed");
+            throw e;
+        }
+    }
+
+    public void paidCourse(WebDriverUtility wUtils, String filePath, String cName, String sDescription, String FAQ_Question, String FAQ_Answer, String aboutSection, String coursePrice, String chapterName, String lessonName) throws InterruptedException, AWTException {
+        navigateToCourseSection(wUtils);
+        openCourseCreation();
+        uploadCoverImage(wUtils, filePath);
+        fillCourseDetails(cName, sDescription);
+        addFaq(wUtils, FAQ_Question, FAQ_Answer);
+        aboutTextField.sendKeys(aboutSection);
+        paidOption.click();
+        wUtils.scrollTillElementToBeVisible(coursePriceTextField);
+        coursePriceTextField.sendKeys(coursePrice);
+        wUtils.waitUntilEleToBeVisible(10, addTaxOption);
+        wUtils.scrollTillElementToBeVisible(addTaxOption);
+        addTaxOption.click();
+        testTaxCheckBox.click();
+        taxSave.click();
+        wUtils.scrollTillElementToBeVisible(continueBtn);
+        Thread.sleep(3000);
+        continueBtn.click();
+        wUtils.waitUntilEleToBeVisible(20,chapterNameTextField);
+        addChapter(chapterName);
+        addLesson(wUtils, lessonName);
+        wUtils.waitUntilEleToBeClickable(10, publishButton);
+        publishCourse(wUtils);
+        afterCourseCreationCloseButton.click();
     }
 
     public void deleteCourse(WebDriverUtility wUtils) throws InterruptedException {
-        //  navigateToCourseSection(wUtils);
+        navigateToCourseSection(wUtils);
         viewCourseDetails();
         wUtils.directScroll(threeDotOption);
         threeDotOption.click();
@@ -290,6 +317,7 @@ public class CoursePage {
     private void uploadCoverImage(WebDriverUtility wUtils, String filePath) throws AWTException, InterruptedException {
         addCoverImageBtn.click();
         imageUploadBtn.click();
+        Thread.sleep(3000);
         wUtils.uploadFile(filePath);
     }
 
@@ -414,5 +442,4 @@ public class CoursePage {
         lessonCommandsTextField.sendKeys(commands);
         saveButton.click();
     }
-
 }
